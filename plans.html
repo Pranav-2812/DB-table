@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plans</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            
+            overflow-x: scroll;
+            flex-direction: column;
+        }
+
+
+        #tbl1 {
+            padding-top: 3%;
+
+            margin: 0 auto;
+        }
+
+        #tbl1 table {
+            border: 3px solid black;
+        }
+
+        #tbl1 th {
+            display: flex;
+            flex-direction: row;
+            /* border: 3px solid black; */
+            /* padding: 3px 3px 3px 3px; */
+        }
+
+        #tbl1 tr {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #tbl1 tr:nth-child(3) {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+        }
+
+        #tbl1 td {
+            border: 3px solid black;
+            padding: 3px 3px 3px 3px;
+            width: 450px;
+
+            float: right;
+        }
+
+        #tbl2 {
+            padding-top: 3%;
+
+            margin: 0 auto;
+        }
+
+        #tbl2 table {
+            border: 3px solid black;
+        }
+
+        #tbl2 th {
+            display: flex;
+            flex-direction: row;
+            /* border: 3px solid black; */
+            /* padding: 3px 3px 3px 3px; */
+        }
+
+        #tbl2 tr {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #tbl2 tr:nth-child(3) {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+        }
+
+        #tbl2 td {
+            border: 3px solid black;
+            padding: 3px 3px 3px 3px;
+            width: 450px;
+
+            float: right;
+        }
+
+        #tbl3 {
+            padding-top: 3%;
+
+            margin: 0 auto;
+        }
+
+        #tbl3 table {
+            border: 3px solid black;
+        }
+
+        #tbl3 th {
+            display: flex;
+            flex-direction: row;
+            /* border: 3px solid black; */
+            /* padding: 3px 3px 3px 3px; */
+        }
+
+        #tbl3 tr {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #tbl3 tr:nth-child(3) {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+        }
+
+        #tbl3 td {
+            border: 3px solid black;
+            padding: 3px 3px 3px 3px;
+            width: 450px;
+
+            float: right;
+        }
+
+        header {
+            display: flex;
+            max-width: 100% !important;
+            height: 3em;
+            /* background: #8393be; */
+            align-items: center;
+            justify-content: center;
+        }
+
+        button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 150px;
+            height: 40px;
+            color: white;
+            background-color: #0d3f78;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 3%;
+
+        }
+
+      
+    </style>
+</head>
+
+<body>
+    <!-- <header>
+        <button>Save Changes</button>
+    </header> -->
+  
+        <table id="tbl1"></table>
+        <table id="tbl2"></table>
+        <table id="tbl3"></table>
+    
+</body>
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+    import {
+        getFirestore,
+        collection,
+        getDocs,
+        doc,
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    import {
+        getDatabase,
+        ref,
+        child,
+        get,
+        push,
+        update,
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyDgCX3eo6sefEv8-7gIpn7yfEvlFbwz5WA",
+        authDomain: "daily-bites-576c3.firebaseapp.com",
+        databaseURL: "https://daily-bites-576c3-default-rtdb.firebaseio.com",
+        projectId: "daily-bites-576c3",
+        storageBucket: "daily-bites-576c3.appspot.com",
+        messagingSenderId: "999976072576",
+        appId: "1:999976072576:web:9cd6aa560fd255ecb0bd65",
+        measurementId: "G-5XHC6BKT87",
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const analytics = getAnalytics(app);
+    const database = getDatabase(app);
+    // Reference to the root of the database
+
+    const dbRef = ref(getDatabase());
+    var table;
+    var mobNo;
+    var description;
+    var breakFast;
+    var price;
+    var vegNonVeg;
+    var homeDelivery;
+    window.onload = function () {
+        mobNo = localStorage.getItem("storageName");
+        console.log(mobNo);
+        get(child(dbRef, "mess/" + mobNo + "/Goldplan")).then((snapshot) => {
+            table = document.getElementById("tbl1");
+            var head = document.createElement("th");
+            var data = document.createElement("td");
+            data.innerHTML = "Gold Plan";
+            data.style.fontSize = "large";
+            head.appendChild(data);
+            table.appendChild(head);
+            document.body.appendChild(table);
+
+
+
+            if (snapshot.exists()) {
+                var row = document.createElement("tr");
+                var data = document.createElement("td");
+                description = snapshot.val().description;
+                data.innerHTML = "Description:" + "  " + description;
+                row.appendChild(data);
+                table.appendChild(row);
+                document.body.appendChild(table);
+
+
+                var data = document.createElement("td");
+                breakFast = snapshot.val().isBreakFastAvailable;
+                data.innerHTML = "Breakfast:" + "  " + breakFast;
+                row.appendChild(data);
+                table.appendChild(row);
+                document.body.appendChild(table);
+
+
+                var data = document.createElement("td");
+                price = snapshot.val().price;
+                data.innerHTML = "Price:" + "  " + price;
+                row.appendChild(data);
+                table.appendChild(row);
+                document.body.appendChild(table);
+
+
+                var data = document.createElement("td");
+                vegNonVeg = snapshot.val().isNonVegInclude;
+                data.innerHTML = "Veg/Non-Veg:" + "  " + vegNonVeg;
+                row.appendChild(data);
+                table.appendChild(row);
+                document.body.appendChild(table);
+
+
+                var data = document.createElement("td");
+                homeDelivery = snapshot.val().isHomeDeliveryAvailable;
+                data.innerHTML = "Home Delivery:" + "  " + homeDelivery;
+                row.appendChild(data);
+                table.appendChild(row);
+                document.body.appendChild(table);
+
+                var Button1 = document.createElement("button");
+                var Button2 = document.createElement("button");
+                var row = document.createElement("tr");
+                Button1.innerText = "View Users";
+                Button2.innerText = "Save Changes";
+                row.appendChild(Button1);
+                row.appendChild(Button2);
+                table.appendChild(row);
+                document.body.appendChild(table);
+                Button1.contentEditable = "false";
+                Button2.contentEditable = "false";
+                Button1.onclick = function () {
+                    var getInput = "Goldplan";
+
+                    localStorage.setItem("planName", getInput);
+
+                    var newBody = window.open('Users.html', '_blank');
+                };
+                Button2.onclick = function () {
+                    // Update the database with the changes to the table
+                    const table1 = document.getElementById("tbl1");
+                    const rows1 = table1.querySelectorAll("tr");
+
+                    rows1.forEach((row) => {
+                        const data = row.querySelectorAll("td");
+                        const description = data[0].innerHTML;
+                        const breakFast = data[1].innerHTML;
+                        const price = data[2].innerHTML;
+                        const vegNonVeg = data[3].innerHTML;
+                        const homeDelivery = data[4].innerHTML;
+
+                        console.log(description);
+                        console.log(breakFast);
+                        console.log(price);
+                        console.log(vegNonVeg);
+                        console.log(homeDelivery);
+
+                        //`/mess/${mobileNo}`
+
+                        //   const updates = {};
+                        //   updates[`/mess/${mobileNo}/Goldplan/description`] = description;
+                        //   updates[`/mess/${mobileNo}/Goldplan/isBreakFastAvailable`] = breakFast;
+                        //   updates[`/mess/${mobileNo}/Goldplan/isHomeDeliveryAvailable`] = homeDelivery;  //definitely will work
+                        //   updates[`/mess/${mobileNo}/Goldplan/isNonVegInclude`] = vegNonVeg;
+                        //   updates[`/mess/${mobileNo}/Goldplan/price`] = price; //
+
+                        //   return update(ref(database), updates);
+
+                    });
+                };
+            } else {
+                console.log("No data Found")
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+        get(child(dbRef, "mess/" + mobNo + "/Diamondplan")).then((snapshot) => {
+            table = document.getElementById("tbl2");
+            var head = document.createElement("th");
+            var data = document.createElement("td");
+            data.innerHTML = "Diamond Plan";
+            data.style.fontSize = "large";
+            head.appendChild(data);
+            table.appendChild(head);
+            document.body.appendChild(table);
+
+
+
+            if (snapshot.exists()) {
+
+                var row = document.createElement("tr");
+                var data = document.createElement("td");
+                description = snapshot.val().description;
+                data.innerHTML = "Description:" + "  " + description;
+                row.appendChild(data);
+                table.appendChild(row);
+                document.body.appendChild(table);
+
+
+                var data = document.createElement("td");
+                breakFast = snapshot.val().isBreakFastAvailable;
+                data.innerHTML = "Breakfast:" + "  " + breakFast;
+                row.appendChild(data);
+                table.appendChild(row);
+                document.body.appendChild(table);
+
+
+                var data = document.createElement("td");
+                price = snapshot.val().price;
+                data.innerHTML = "Price:" + "  " + price;
+                row.appendChild(data);
+                table.appendChild(row);
+                document.body.appendChild(table);
+
+
+                var data = document.createElement("td");
+                vegNonVeg = snapshot.val().isNonVegInclude;
+                data.innerHTML = "Veg/Non-Veg:" + "  " + vegNonVeg;
+                row.appendChild(data);
+                table.appendChild(row);
+                document.body.appendChild(table);
+
+
+                var data = document.createElement("td");
+                homeDelivery = snapshot.val().isHomeDeliveryAvailable;
+                data.innerHTML = "Home Delivery:" + "  " + homeDelivery;
+                row.appendChild(data);
+                table.appendChild(row);
+                document.body.appendChild(table);
+
+
+                var Button1 = document.createElement("button");
+                var Button2 = document.createElement("button");
+                var row = document.createElement("tr");
+                Button1.innerText = "View Users";
+                Button2.innerText = "Save Changes";
+                row.appendChild(Button1);
+                row.appendChild(Button2);
+                table.appendChild(row);
+                document.body.appendChild(table);
+                Button1.contentEditable = "false";
+                Button2.contentEditable = "false";
+                Button1.onclick = function () {
+                    var getInput = "Diamondplan";
+
+                    localStorage.setItem("planName", getInput);
+
+                    var newBody = window.open('Users.html', '_blank');
+                };
+                Button2.onclick = function () {
+                    const table2 = document.getElementById("tbl2");
+                    const rows2 = table2.querySelectorAll("tr");
+
+                    rows2.forEach((row) => {
+                        const data = row.querySelectorAll("td");
+                        const description = data[0].innerHTML;
+                        const breakFast = data[1].innerHTML;
+                        const price = data[2].innerHTML;
+                        const vegNonVeg = data[3].innerHTML;
+                        const homeDelivery = data[4].innerHTML;
+
+                        console.log(description);
+                        console.log(breakFast);
+                        console.log(price);
+                        console.log(vegNonVeg);
+                        console.log(homeDelivery);
+
+                        //`/mess/${mobileNo}`
+
+                        //   const updates = {};
+                        //   updates[`/mess/${mobileNo}/Goldplan/description`] = description;
+                        //   updates[`/mess/${mobileNo}/Goldplan/isBreakFastAvailable`] = breakFast;
+                        //   updates[`/mess/${mobileNo}/Goldplan/isHomeDeliveryAvailable`] = homeDelivery;  //definitely will work
+                        //   updates[`/mess/${mobileNo}/Goldplan/isNonVegInclude`] = vegNonVeg;
+                        //   updates[`/mess/${mobileNo}/Goldplan/price`] = price; //
+
+                        //   return update(ref(database), updates);
+
+                    });
+                }
+            } else {
+                console.log("No data Found")
+            }
+        }).catch((error) => {
+            console.error(error);
+        });;
+        get(child(dbRef, "mess/" + mobNo + "/Silverplan")).then((snapshot) => {
+            table = document.getElementById("tbl3");
+            var head = document.createElement("th");
+            var data = document.createElement("td");
+            data.innerHTML = "Silver Plan";
+            data.style.fontSize = "large";
+            head.appendChild(data);
+            table.appendChild(head);
+            document.body.appendChild(table);
+
+
+
+            if (snapshot.exists()) {
+
+
+                var row = document.createElement("tr");
+                var data = document.createElement("td");
+                description = snapshot.val().description;
+                data.innerHTML = "Description:" + "  " + description;
+                row.appendChild(data);
+                table.appendChild(row);
+                document.body.appendChild(table);
+
+
+                var data = document.createElement("td");
+                breakFast = snapshot.val().isBreakFastAvailable;
+                data.innerHTML = "Breakfast:" + "  " + breakFast;
+                row.appendChild(data);
+                table.appendChild(row);
+                document.body.appendChild(table);
+
+
+                var data = document.createElement("td");
+                price = snapshot.val().price;
+                data.innerHTML = "Price:" + "  " + price;
+                row.appendChild(data);
+                table.appendChild(row);
+                document.body.appendChild(table);
+
+
+                var data = document.createElement("td");
+                vegNonVeg = snapshot.val().isNonVegInclude;
+                data.innerHTML = "Veg/Non-Veg:" + "  " + vegNonVeg;
+                row.appendChild(data);
+                table.appendChild(row);
+                document.body.appendChild(table);
+
+
+                var data = document.createElement("td");
+                homeDelivery = snapshot.val().isHomeDeliveryAvailable;
+                data.innerHTML = "Home Delivery:" + "  " + homeDelivery;
+                row.appendChild(data);
+                table.appendChild(row);
+                document.body.appendChild(table);
+
+
+                var Button1 = document.createElement("button");
+                var Button2 = document.createElement("button");
+                var row = document.createElement("tr");
+                Button1.innerText = "View Users";
+                Button2.innerText = "Save Changes";
+                row.appendChild(Button1);
+                row.appendChild(Button2);
+                table.appendChild(row);
+                document.body.appendChild(table);
+                Button1.contentEditable = "false";
+                Button2.contentEditable = "false";
+                Button1.onclick = function () {
+                    var getInput = "Silverplan";
+
+                    localStorage.setItem("planName", getInput);
+
+                    var newBody = window.open('Users.html', '_blank');
+                };
+                Button2.onclick = function () {
+                    const table3 = document.getElementById("tbl3");
+                    const rows3 = table3.querySelectorAll("tr");
+
+                    rows3.forEach((row) => {
+                        const data = row.querySelectorAll("td");
+                        const description = data[0].innerHTML;
+                        const breakFast = data[1].innerHTML;
+                        const price = data[2].innerHTML;
+                        const vegNonVeg = data[3].innerHTML;
+                        const homeDelivery = data[4].innerHTML;
+
+                        console.log(description);
+                        console.log(breakFast);
+                        console.log(price);
+                        console.log(vegNonVeg);
+                        console.log(homeDelivery);
+
+                        //`/mess/${mobileNo}`
+
+                        //   const updates = {};
+                        //   updates[`/mess/${mobileNo}/Goldplan/description`] = description;
+                        //   updates[`/mess/${mobileNo}/Goldplan/isBreakFastAvailable`] = breakFast;
+                        //   updates[`/mess/${mobileNo}/Goldplan/isHomeDeliveryAvailable`] = homeDelivery;  //definitely will work
+                        //   updates[`/mess/${mobileNo}/Goldplan/isNonVegInclude`] = vegNonVeg;
+                        //   updates[`/mess/${mobileNo}/Goldplan/price`] = price; //
+
+                        //   return update(ref(database), updates);
+
+                    });
+                }
+            } else {
+                console.log("No data Found")
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+    };
+
+</script>
+
+</html>

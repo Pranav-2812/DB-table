@@ -1,375 +1,473 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tables</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-      }
-      #tbl {
-        margin: 0 auto;
-      }
-      #tbl table {
-        border: 3px solid black;
-      }
 
-      #tbl th {
-        display: flex;
-        flex-direction: row;
-        /* border: 3px solid black; */
-        /* padding: 3px 3px 3px 3px; */
-      }
-      #tbl tr {
-        display: flex;
-        flex-direction: row;
-      }
-      #tbl td {
-        border: 3px solid black;
-        padding: 3px 3px 3px 3px;
-        width: 200px;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tables</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
 
-        float: right;
-      }
-    </style>
-  </head>
-  <body>
-    <div>
-      <table id="tbl" contenteditable="">
-       
-      </table>
-    </div>
-  </body>
-  <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
-    import {
-      getFirestore,
-      collection,
-      getDocs,
-      doc,
-    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-    import {
-      getDatabase,
-      ref,
-      child,
-      get,
-      onValue,
-    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+    #tbl {
+      padding-top: 3%;
+      margin: 0 auto;
+    }
 
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
+    #tbl table {
+      border: 3px solid black;
+    }
 
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    const firebaseConfig = {
-      apiKey: "AIzaSyDgCX3eo6sefEv8-7gIpn7yfEvlFbwz5WA",
-      authDomain: "daily-bites-576c3.firebaseapp.com",
-      databaseURL: "https://daily-bites-576c3-default-rtdb.firebaseio.com",
-      projectId: "daily-bites-576c3",
-      storageBucket: "daily-bites-576c3.appspot.com",
-      messagingSenderId: "999976072576",
-      appId: "1:999976072576:web:9cd6aa560fd255ecb0bd65",
-      measurementId: "G-5XHC6BKT87",
-    };
+    #tbl th {
+      display: flex;
+      flex-direction: row;
+      /* border: 3px solid black; */
+      /* padding: 3px 3px 3px 3px; */
+    }
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const analytics = getAnalytics(app);
-    const database = getDatabase(app);
-    // Reference to the root of the database
+    #tbl tr {
+      display: flex;
+      flex-direction: row;
+    }
 
-    const dbRef = ref(getDatabase());
-    //   const id= ref(getDatabase())
-    var mobNo = 0;
-    var email = 0;
-    var messName = 0;
-    var ownerName = 0;
-    var accountNo = 0;
-    var ifscNo = 0;
-    var accHolder = 0;
-    var bankName = 0;
-    var aadharNo = 0;
-    var password = 0;
-    var rating = 0;
-    var wallet = 0;
-    var Withdraw = 0;
-    var pending = 0;
-    var verify = 0;
+    #tbl td {
+      border: 3px solid black;
+      padding: 3px 3px 3px 3px;
+      width: 200px;
 
-    get(child(dbRef, "mess"))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          var table = document.getElementById("tbl");
-          var row = document.createElement("th");
-          var data = document.createElement("td");
-          data.innerHTML = "Mob No";
-          row.appendChild(data); // Append the <td> element to the <tr> element
-          table.appendChild(row); // Append the <tr> element to the <table> element
-          document.body.appendChild(table);
+      float: right;
+    }
 
-          var data = document.createElement("td");
-          data.innerHTML = "Email";
-          row.appendChild(data); // Append the <td> element to the <tr> element
-          table.appendChild(row); // Append the <tr> element to the <table> element
-          document.body.appendChild(table);
+    header {
+      display: flex;
+      max-width: 100% !important;
+      height: 3em;
+      /* background: #8393be; */
+      align-items: center;
+      justify-content: center;
+    }
 
-          var data = document.createElement("td");
-          data.innerHTML = "Mess Name";
-          row.appendChild(data); // Append the <td> element to the <tr> element
-          table.appendChild(row); // Append the <tr> element to the <table> element
-          document.body.appendChild(table);
-
-          var data = document.createElement("td");
-          data.innerHTML = "Owner Name";
-          row.appendChild(data); // Append the <td> element to the <tr> element
-          table.appendChild(row); // Append the <tr> element to the <table> element
-          document.body.appendChild(table);
-
-          var data = document.createElement("td");
-          data.innerHTML = "AC NO";
-          row.appendChild(data); // Append the <td> element to the <tr> element
-          table.appendChild(row); // Append the <tr> element to the <table> element
-          document.body.appendChild(table);
-
-          var data = document.createElement("td");
-          data.innerHTML = "IFSC NO";
-          row.appendChild(data); // Append the <td> element to the <tr> element
-          table.appendChild(row); // Append the <tr> element to the <table> element
-          document.body.appendChild(table);
-
-          var data = document.createElement("td");
-          data.innerHTML = "AC Holder";
-          row.appendChild(data); // Append the <td> element to the <tr> element
-          table.appendChild(row); // Append the <tr> element to the <table> element
-          document.body.appendChild(table);
-
-          var data = document.createElement("td");
-          data.innerHTML = "Bank Name";
-          row.appendChild(data); // Append the <td> element to the <tr> element
-          table.appendChild(row); // Append the <tr> element to the <table> element
-          document.body.appendChild(table);
-
-          var data = document.createElement("td");
-          data.innerHTML = "Aadhar No";
-          row.appendChild(data); // Append the <td> element to the <tr> element
-          table.appendChild(row); // Append the <tr> element to the <table> element
-          document.body.appendChild(table);
-
-          var data = document.createElement("td");
-          data.innerHTML = "Password";
-          row.appendChild(data); // Append the <td> element to the <tr> element
-          table.appendChild(row); // Append the <tr> element to the <table> element
-          document.body.appendChild(table);
-
-          var data = document.createElement("td");
-          data.innerHTML = "Rating";
-          row.appendChild(data); // Append the <td> element to the <tr> element
-          table.appendChild(row); // Append the <tr> element to the <table> element
-          document.body.appendChild(table);
-
-          var data = document.createElement("td");
-          data.innerHTML = "Verify";
-          row.appendChild(data); // Append the <td> element to the <tr> element
-          table.appendChild(row); // Append the <tr> element to the <table> element
-          document.body.appendChild(table);
-
-          var data = document.createElement("td");
-          data.innerHTML = "Wallet";
-          row.appendChild(data); // Append the <td> element to the <tr> element
-          table.appendChild(row); // Append the <tr> element to the <table> element
-          document.body.appendChild(table);
-
-          var data = document.createElement("td");
-          data.innerHTML = "Total Withdraw";
-          row.appendChild(data); // Append the <td> element to the <tr> element
-          table.appendChild(row); // Append the <tr> element to the <table> element
-          document.body.appendChild(table);
-
-          var data = document.createElement("td");
-          data.innerHTML = "Pending Amt";
-          row.appendChild(data); // Append the <td> element to the <tr> element
-          table.appendChild(row); // Append the <tr> element to the <table> element
-          document.body.appendChild(table);
-
-          // data.innerHTML="SIlver Plan";
-
-          // data.innerHTML="Gold Plan";
-
-          // data.innerHTML="Diamond plan";
-
-          snapshot.forEach((childSnapshot) => {
-            if (childSnapshot.exists()) {
-              mobNo = childSnapshot.val().mobileNo;
-
-              var row = document.createElement("tr");
-              var data = document.createElement("td");
-              data.innerHTML = mobNo;
-              row.appendChild(data); // Append the <td> element to the <tr> element
-              table.appendChild(row); // Append the <tr> element to the <table> element
-              document.body.appendChild(table);
-
-              email = childSnapshot.val().email;
-              var data = document.createElement("td");
-              data.innerHTML = email;
-              row.appendChild(data); // Append the <td> element to the <tr> element
-              table.appendChild(row); // Append the <tr> element to the <table> element
-              document.body.appendChild(table);
-
-              messName = childSnapshot.val().messName;
-              // var table = document.getElementById("tbl");
-              // var row = document.createElement("tr");
-              var data = document.createElement("td");
-              data.innerHTML = messName;
-              row.appendChild(data); // Append the <td> element to the <tr> element
-              table.appendChild(row); // Append the <tr> element to the <table> element
-              document.body.appendChild(table);
-
-              ownerName = childSnapshot.val().ownerName;
-
-              // var table = document.getElementById("tbl");
-              // var row = document.createElement("tr");
-              var data = document.createElement("td");
-              data.innerHTML = ownerName;
-              row.appendChild(data); // Append the <td> element to the <tr> element
-              table.appendChild(row); // Append the <tr> element to the <table> element
-              document.body.appendChild(table);
-
-              accountNo = childSnapshot.val().accountNo;
-              // var table = document.getElementById("tbl");
-              // var row = document.createElement("tr");
-              var data = document.createElement("td");
-              data.innerHTML = accountNo;
-              row.appendChild(data); // Append the <td> element to the <tr> element
-              table.appendChild(row); // Append the <tr> element to the <table> element
-              document.body.appendChild(table);
-
-              ifscNo = childSnapshot.val().ifsc;
-              // var table = document.getElementById("tbl");
-              // var row = document.createElement("tr");
-              var data = document.createElement("td");
-              data.innerHTML = ifscNo;
-              row.appendChild(data); // Append the <td> element to the <tr> element
-              table.appendChild(row); // Append the <tr> element to the <table> element
-              document.body.appendChild(table);
-
-              accHolder = childSnapshot.val().bankHolderName;
-              // var table = document.getElementById("tbl");
-              // var row = document.createElement("tr");
-              var data = document.createElement("td");
-              data.innerHTML = accHolder;
-              row.appendChild(data); // Append the <td> element to the <tr> element
-              table.appendChild(row); // Append the <tr> element to the <table> element
-              document.body.appendChild(table);
-
-              bankName = childSnapshot.val().bankName;
-              // var table = document.getElementById("tbl");
-              // var row = document.createElement("tr");
-              var data = document.createElement("td");
-              data.innerHTML = bankName;
-              row.appendChild(data); // Append the <td> element to the <tr> element
-              table.appendChild(row); // Append the <tr> element to the <table> element
-              document.body.appendChild(table);
-
-              aadharNo = childSnapshot.val().addharNo;
-              var data = document.createElement("td");
-              data.innerHTML = aadharNo;
-              row.appendChild(data); // Append the <td> element to the <tr> element
-              table.appendChild(row); // Append the <tr> element to the <table> element
-              document.body.appendChild(table);
-
-              password = childSnapshot.val().password;
-              var data = document.createElement("td");
-              data.innerHTML = password;
-              row.appendChild(data); // Append the <td> element to the <tr> element
-              table.appendChild(row); // Append the <tr> element to the <table> element
-              document.body.appendChild(table);
-
-              rating = childSnapshot.val().ratings;
-              var data = document.createElement("td");
-              data.innerHTML = rating;
-              row.appendChild(data); // Append the <td> element to the <tr> element
-              table.appendChild(row); // Append the <tr> element to the <table> element
-              document.body.appendChild(table);
-
-              verify = childSnapshot.val().isVerified;
-              var data = document.createElement("td");
-              data.innerHTML = verify;
-              row.appendChild(data); // Append the <td> element to the <tr> element
-              table.appendChild(row); // Append the <tr> element to the <table> element
-              document.body.appendChild(table);
-
-              wallet = childSnapshot.val().wallet;
-              var data = document.createElement("td");
-              data.innerHTML = wallet;
-              row.appendChild(data); // Append the <td> element to the <tr> element
-              table.appendChild(row); // Append the <tr> element to the <table> element
-              document.body.appendChild(table);
-
-              Withdraw = childSnapshot.val().totalWithdraw;
-              var data = document.createElement("td");
-              data.innerHTML = Withdraw;
-              row.appendChild(data); // Append the <td> element to the <tr> element
-              table.appendChild(row); // Append the <tr> element to the <table> element
-              document.body.appendChild(table);
-
-              pending = childSnapshot.val().withdrawPending;
-              var data = document.createElement("td");
-              data.innerHTML = pending;
-              row.appendChild(data); // Append the <td> element to the <tr> element
-              table.appendChild(row); // Append the <tr> element to the <table> element
-              document.body.appendChild(table);
-              //backup
-              // pending = childSnapshot.val().withdrawPending;
-              // var data = document.createElement("td");
-              // data.innerHTML = pending;
-              // row.appendChild(data); // Append the <td> element to the <tr> element
-              // table.appendChild(row); // Append the <tr> element to the <table> element
-              // document.body.appendChild(table);
-
-
+    button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 150px;
+      height: 40px;
+      color: white;
+      background-color: #0d3f78;
+      border-radius: 10px;
+      cursor: pointer;
+      
       
 
-              // Append the <table> element to the <body> element
-              // console.log(childSnapshot.val().mobileNo);
-              // console.log(childSnapshot.val().accountNo);
-              // console.log(childSnapshot.val().Diamondplan);
-            }
+    }
+  </style>
+</head>
 
-            // childSnapshot.forEach((Snapshot)=>{
-            //     if(Snapshot.exists()){
-            //         console.log(Snapshot.val());
-            //         console.log(Snapshot.val().description);
-            //     }
-            // })
-          });
-        } else {
-          console.log("No data available");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+<body>
+  <header>
+    <button>Save Changes</button>
+  </header>
+  <div>
+    <table id="tbl" contenteditable=""></table>
+  </div>
+</body>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+  import { getFirestore, collection, getDocs, doc, } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+  import { getDatabase, ref, child, get, push, update } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
 
-    // get(child("id")).then((snapshot)=>{
-    //     if (snapshot.exits()){
-    //         console.log("Mob No:",snapshot.val().mobileNo);
-    //     }
-    // })
 
-    // // Fetch all documents in the "users" collection
 
-    // const usersCollectionRef=collection(db,"User");
-    // const querySnapshot=await getDocs(usersCollectionRef);
-    // // const docRef = doc(db, "User");
-    // // const docSnap = await getDoc(docRef);
 
-    // querySnapshot.forEach((doc) => {
-    //   console.log("User Name:", doc.data().name);
-    // });
-  </script>
+
+
+
+
+
+
+
+
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDgCX3eo6sefEv8-7gIpn7yfEvlFbwz5WA",
+    authDomain: "daily-bites-576c3.firebaseapp.com",
+    databaseURL: "https://daily-bites-576c3-default-rtdb.firebaseio.com",
+    projectId: "daily-bites-576c3",
+    storageBucket: "daily-bites-576c3.appspot.com",
+    messagingSenderId: "999976072576",
+    appId: "1:999976072576:web:9cd6aa560fd255ecb0bd65",
+    measurementId: "G-5XHC6BKT87",
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const analytics = getAnalytics(app);
+  const database = getDatabase(app);
+  // Reference to the root of the database
+
+  const dbRef = ref(getDatabase());
+  //   const id= ref(getDatabase())
+  var mobNo = 0;
+  var email = 0;
+  var messName = 0;
+  var ownerName = 0;
+  var accountNo = 0;
+  var ifscNo = 0;
+  var accHolder = 0;
+  var bankName = 0;
+  var aadharNo = 0;
+  var password = 0;
+  var rating = 0;
+  var wallet = 0;
+  var Withdraw = 0;
+  var pending = 0;
+  var verify = 0;
+  
+
+  get(child(dbRef, "mess"))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        var table = document.getElementById("tbl");
+        var row = document.createElement("th");
+        var data = document.createElement("td");
+        data.innerHTML = "Mob No";
+        row.appendChild(data); // Append the <td> element to the <tr> element
+        table.appendChild(row); // Append the <tr> element to the <table> element
+        document.body.appendChild(table);
+
+        var data = document.createElement("td");
+        data.innerHTML = "Email";
+        row.appendChild(data); // Append the <td> element to the <tr> element
+        table.appendChild(row); // Append the <tr> element to the <table> element
+        document.body.appendChild(table);
+
+        var data = document.createElement("td");
+        data.innerHTML = "Mess Name";
+        row.appendChild(data); // Append the <td> element to the <tr> element
+        table.appendChild(row); // Append the <tr> element to the <table> element
+        document.body.appendChild(table);
+
+        var data = document.createElement("td");
+        data.innerHTML = "Owner Name";
+        row.appendChild(data); // Append the <td> element to the <tr> element
+        table.appendChild(row); // Append the <tr> element to the <table> element
+        document.body.appendChild(table);
+
+        var data = document.createElement("td");
+        data.innerHTML = "AC NO";
+        row.appendChild(data); // Append the <td> element to the <tr> element
+        table.appendChild(row); // Append the <tr> element to the <table> element
+        document.body.appendChild(table);
+
+        var data = document.createElement("td");
+        data.innerHTML = "IFSC NO";
+        row.appendChild(data); // Append the <td> element to the <tr> element
+        table.appendChild(row); // Append the <tr> element to the <table> element
+        document.body.appendChild(table);
+
+        var data = document.createElement("td");
+        data.innerHTML = "AC Holder";
+        row.appendChild(data); // Append the <td> element to the <tr> element
+        table.appendChild(row); // Append the <tr> element to the <table> element
+        document.body.appendChild(table);
+
+        var data = document.createElement("td");
+        data.innerHTML = "Bank Name";
+        row.appendChild(data); // Append the <td> element to the <tr> element
+        table.appendChild(row); // Append the <tr> element to the <table> element
+        document.body.appendChild(table);
+
+        var data = document.createElement("td");
+        data.innerHTML = "Aadhar No";
+        row.appendChild(data); // Append the <td> element to the <tr> element
+        table.appendChild(row); // Append the <tr> element to the <table> element
+        document.body.appendChild(table);
+
+        var data = document.createElement("td");
+        data.innerHTML = "Password";
+        row.appendChild(data); // Append the <td> element to the <tr> element
+        table.appendChild(row); // Append the <tr> element to the <table> element
+        document.body.appendChild(table);
+
+        var data = document.createElement("td");
+        data.innerHTML = "Rating";
+        row.appendChild(data); // Append the <td> element to the <tr> element
+        table.appendChild(row); // Append the <tr> element to the <table> element
+        document.body.appendChild(table);
+
+        var data = document.createElement("td");
+        data.innerHTML = "Verify";
+        row.appendChild(data); // Append the <td> element to the <tr> element
+        table.appendChild(row); // Append the <tr> element to the <table> element
+        document.body.appendChild(table);
+
+        var data = document.createElement("td");
+        data.innerHTML = "Wallet";
+        row.appendChild(data); // Append the <td> element to the <tr> element
+        table.appendChild(row); // Append the <tr> element to the <table> element
+        document.body.appendChild(table);
+
+        var data = document.createElement("td");
+        data.innerHTML = "Total Withdraw";
+        row.appendChild(data); // Append the <td> element to the <tr> element
+        table.appendChild(row); // Append the <tr> element to the <table> element
+        document.body.appendChild(table);
+
+        var data = document.createElement("td");
+        data.innerHTML = "Pending Amt";
+        row.appendChild(data); // Append the <td> element to the <tr> element
+        table.appendChild(row); // Append the <tr> element to the <table> element
+        document.body.appendChild(table);
+
+
+
+        // data.innerHTML="SIlver Plan";
+
+        // data.innerHTML="Gold Plan";
+
+        // data.innerHTML="Diamond plan";
+
+        snapshot.forEach((childSnapshot) => {
+          if (childSnapshot.exists()) {
+            var mobNo = childSnapshot.val().mobileNo;
+
+            var row = document.createElement("tr");
+            var data = document.createElement("td");
+            data.innerHTML = mobNo;
+            row.appendChild(data); // Append the <td> element to the <tr> element
+            table.appendChild(row); // Append the <tr> element to the <table> element
+            document.body.appendChild(table);
+
+            email = childSnapshot.val().email;
+            var data = document.createElement("td");
+            data.innerHTML = email;
+            row.appendChild(data); // Append the <td> element to the <tr> element
+            table.appendChild(row); // Append the <tr> element to the <table> element
+            document.body.appendChild(table);
+
+            messName = childSnapshot.val().messName;
+            // var table = document.getElementById("tbl");
+            // var row = document.createElement("tr");
+            var data = document.createElement("td");
+            data.innerHTML = messName;
+            row.appendChild(data); // Append the <td> element to the <tr> element
+            table.appendChild(row); // Append the <tr> element to the <table> element
+            document.body.appendChild(table);
+
+            ownerName = childSnapshot.val().ownerName;
+
+            // var table = document.getElementById("tbl");
+            // var row = document.createElement("tr");
+            var data = document.createElement("td");
+            data.innerHTML = ownerName;
+            row.appendChild(data); // Append the <td> element to the <tr> element
+            table.appendChild(row); // Append the <tr> element to the <table> element
+            document.body.appendChild(table);
+
+            accountNo = childSnapshot.val().accountNo;
+            // var table = document.getElementById("tbl");
+            // var row = document.createElement("tr");
+            var data = document.createElement("td");
+            data.innerHTML = accountNo;
+            row.appendChild(data); // Append the <td> element to the <tr> element
+            table.appendChild(row); // Append the <tr> element to the <table> element
+            document.body.appendChild(table);
+
+            ifscNo = childSnapshot.val().ifsc;
+            // var table = document.getElementById("tbl");
+            // var row = document.createElement("tr");
+            var data = document.createElement("td");
+            data.innerHTML = ifscNo;
+            row.appendChild(data); // Append the <td> element to the <tr> element
+            table.appendChild(row); // Append the <tr> element to the <table> element
+            document.body.appendChild(table);
+
+            accHolder = childSnapshot.val().bankHolderName;
+            // var table = document.getElementById("tbl");
+            // var row = document.createElement("tr");
+            var data = document.createElement("td");
+            data.innerHTML = accHolder;
+            row.appendChild(data); // Append the <td> element to the <tr> element
+            table.appendChild(row); // Append the <tr> element to the <table> element
+            document.body.appendChild(table);
+
+            bankName = childSnapshot.val().bankName;
+            // var table = document.getElementById("tbl");
+            // var row = document.createElement("tr");
+            var data = document.createElement("td");
+            data.innerHTML = bankName;
+            row.appendChild(data); // Append the <td> element to the <tr> element
+            table.appendChild(row); // Append the <tr> element to the <table> element
+            document.body.appendChild(table);
+
+            aadharNo = childSnapshot.val().addharNo;
+            var data = document.createElement("td");
+            data.innerHTML = aadharNo;
+            row.appendChild(data); // Append the <td> element to the <tr> element
+            table.appendChild(row); // Append the <tr> element to the <table> element
+            document.body.appendChild(table);
+
+            password = childSnapshot.val().password;
+            var data = document.createElement("td");
+            data.innerHTML = password;
+            row.appendChild(data); // Append the <td> element to the <tr> element
+            table.appendChild(row); // Append the <tr> element to the <table> element
+            document.body.appendChild(table);
+
+            rating = childSnapshot.val().ratings;
+            var data = document.createElement("td");
+            data.innerHTML = rating;
+            row.appendChild(data); // Append the <td> element to the <tr> element
+            table.appendChild(row); // Append the <tr> element to the <table> element
+            document.body.appendChild(table);
+
+            verify = childSnapshot.val().isVerified;
+            var data = document.createElement("td");
+            data.innerHTML = verify;
+            row.appendChild(data); // Append the <td> element to the <tr> element
+            table.appendChild(row); // Append the <tr> element to the <table> element
+            document.body.appendChild(table);
+
+            wallet = childSnapshot.val().wallet;
+            var data = document.createElement("td");
+            data.innerHTML = wallet;
+            row.appendChild(data); // Append the <td> element to the <tr> element
+            table.appendChild(row); // Append the <tr> element to the <table> element
+            document.body.appendChild(table);
+
+            Withdraw = childSnapshot.val().totalWithdraw;
+            var data = document.createElement("td");
+            data.innerHTML = Withdraw;
+            row.appendChild(data); // Append the <td> element to the <tr> element
+            table.appendChild(row); // Append the <tr> element to the <table> element
+            document.body.appendChild(table);
+
+            pending = childSnapshot.val().withdrawPending;
+            var data = document.createElement("td");
+            data.innerHTML = pending;
+            row.appendChild(data); // Append the <td> element to the <tr> element
+            table.appendChild(row); // Append the <tr> element to the <table> element
+            document.body.appendChild(table);
+
+            var Button = document.createElement("button");
+            Button.innerText = "View Plans";
+            row.appendChild(Button);
+            table.appendChild(row);
+            document.body.appendChild(table);
+            Button.contentEditable = "false";
+            Button.onclick = function () {
+              var getInput = mobNo;
+
+              localStorage.setItem("storageName", getInput);
+
+              var newBody = window.open('plans.html', '_blank');
+            };
+            //backup
+            // pending = childSnapshot.val().withdrawPending;
+            // var data = document.createElement("td");
+            // data.innerHTML = pending;
+            // row.appendChild(data); // Append the <td> element to the <tr> element
+            // table.appendChild(row); // Append the <tr> element to the <table> element
+            // document.body.appendChild(table);
+
+
+
+
+            // Append the <table> element to the <body> element
+            // console.log(childSnapshot.val().mobileNo);
+            // console.log(childSnapshot.val().accountNo);
+            // console.log(childSnapshot.val().Diamondplan);
+          }
+
+          // childSnapshot.forEach((Snapshot)=>{
+          //     if(Snapshot.exists()){
+          //         console.log(Snapshot.val());
+          //         console.log(Snapshot.val().description);
+          //     }
+          // })
+        });
+      } else {
+        console.log("No data available");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  const saveChange = document.querySelector("button");
+  saveChange.onclick = function () {
+    // Update the database with the changes to the table
+    const table = document.getElementById("tbl");
+    const rows = table.querySelectorAll("tr");
+
+    rows.forEach((row) => {
+      const data = row.querySelectorAll("td");
+      const mobileNo = data[0].innerHTML;
+      const email = data[1].innerHTML;
+      const messName = data[2].innerHTML;
+      const ownerName = data[3].innerHTML;
+      const accountNo = data[4].innerHTML;
+      const ifscNo = data[5].innerHTML;
+      const accHolder = data[6].innerHTML;
+      const bankName = data[7].innerHTML;
+      const aadharNo = data[8].innerHTML;
+      const password = data[9].innerHTML;
+      const rating = data[10].innerHTML;
+      const verify = data[11].innerHTML;
+      const wallet = data[12].innerHTML;
+      const Withdraw = data[13].innerHTML;
+      const pending = data[14].innerHTML;
+      //`/mess/${mobileNo}`
+
+      const updates = {};
+      updates[`/mess/${mobileNo}/mobileNo`] = mobileNo;
+      updates[`/mess/${mobileNo}/email`] = email;
+      updates[`/mess/${mobileNo}/messName`] = messName;  //definitely will work
+      updates[`/mess/${mobileNo}/accountNo`] = accountNo;
+      updates[`/mess/${mobileNo}/ownerName`] = ownerName; //
+
+      return update(ref(database), updates);
+      // const branch = ref.child("mess").child('7757085531');
+
+      // branch.set({
+      //   mobileNo: '7757085531',
+      //   email: 'email@example.com',
+      //   messName: 'Mess Name',
+      //   accountNo: '1234567890',
+      // });
+
+    })
+  }
+
+
+
+
+        // get(child("id")).then((snapshot)=>{
+        //     if (snapshot.exits()){
+        //         console.log("Mob No:",snapshot.val().mobileNo);
+        //     }
+        // })
+
+        // // Fetch all documents in the "users" collection
+
+        // const usersCollectionRef=collection(db,"User");
+        // const querySnapshot=await getDocs(usersCollectionRef);
+        // // const docRef = doc(db, "User");
+        // // const docSnap = await getDoc(docRef);
+
+        // querySnapshot.forEach((doc) => {
+        //   console.log("User Name:", doc.data().name);
+        // });
+</script>
+
 </html>

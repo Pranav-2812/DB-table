@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #tbl {
+            padding-top: 3%;
+            margin: 0 auto;
+        }
+
+        #tbl table {
+            border: 3px solid black;
+        }
+
+        #tbl th {
+            display: flex;
+            flex-direction: row;
+            /* border: 3px solid black; */
+            /* padding: 3px 3px 3px 3px; */
+        }
+
+        #tbl tr {
+            display: flex;
+            flex-direction: row;
+        }
+
+        #tbl td {
+            border: 3px solid black;
+            padding: 3px 3px 3px 3px;
+            width: 200px;
+
+            float: right;
+        }
+
+        header {
+            display: flex;
+            max-width: 100% !important;
+            height: 3em;
+            /* background: #8393be; */
+            align-items: center;
+            justify-content: center;
+        }
+        button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 150px;
+            height: 40px;
+            color: white;
+            background-color: #0d3f78;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 3%;
+
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button>Save Changes</button>
+    </header>
+
+    <table id="tbl" contenteditable=""></table>
+
+</body>
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+    import {
+        getFirestore,
+        collection,
+        getDocs,
+        doc,
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    import {
+        getDatabase,
+        ref,
+        child,
+        get,
+        push,
+        update,
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyDgCX3eo6sefEv8-7gIpn7yfEvlFbwz5WA",
+        authDomain: "daily-bites-576c3.firebaseapp.com",
+        databaseURL: "https://daily-bites-576c3-default-rtdb.firebaseio.com",
+        projectId: "daily-bites-576c3",
+        storageBucket: "daily-bites-576c3.appspot.com",
+        messagingSenderId: "999976072576",
+        appId: "1:999976072576:web:9cd6aa560fd255ecb0bd65",
+        measurementId: "G-5XHC6BKT87",
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const analytics = getAnalytics(app);
+    const database = getDatabase(app);
+    // Reference to the root of the database
+    const dbRef = ref(getDatabase());
+
+    var mobNo;
+    var plan;
+    var name;
+    var toDate;
+    var fromDate;
+    var email;
+    var orderId;
+    var address;
+    var table;
+
+    window.onload = function () {
+        mobNo = localStorage.getItem("storageName");
+        plan = localStorage.getItem("planName");
+        // console.log(plan);
+
+        get(child(dbRef, "mess/" + mobNo + "/" + plan + "/Users")).then((snapshot) => {
+
+            table = document.getElementById("tbl");
+            var row = document.createElement("th");
+            var data = document.createElement("td");
+            data.innerHTML = "Name";
+            row.appendChild(data);
+            table.appendChild(row);
+            document.body.appendChild(table);
+
+
+
+            var data = document.createElement("td");
+            data.innerHTML = "Mob No";
+            row.appendChild(data);
+            table.appendChild(row);
+            document.body.appendChild(table);
+
+
+
+            var data = document.createElement("td");
+            data.innerHTML = "Email";
+            row.appendChild(data);
+            table.appendChild(row);
+            document.body.appendChild(table);
+
+
+
+            var data = document.createElement("td");
+            data.innerHTML = "Address";
+            row.appendChild(data);
+            table.appendChild(row);
+            document.body.appendChild(table);
+
+
+
+            var data = document.createElement("td");
+            data.innerHTML = "From Date";
+            row.appendChild(data);
+            table.appendChild(row);
+            document.body.appendChild(table);
+
+
+
+            var data = document.createElement("td");
+            data.innerHTML = "To Data";
+            row.appendChild(data);
+            table.appendChild(row);
+            document.body.appendChild(table);
+
+
+
+            var data = document.createElement("td");
+            data.innerHTML = "Order ID";
+            row.appendChild(data);
+            table.appendChild(row);
+            document.body.appendChild(table);
+
+            if (snapshot.exists()) {
+
+                snapshot.forEach((childSnapshot) => {
+                    name = childSnapshot.val().name;
+                    var row = document.createElement("tr");
+                    var data = document.createElement("td");
+                    data.innerHTML = name;
+                    row.appendChild(data);
+                    table.appendChild(row);
+                    document.body.appendChild(table);
+
+                    mobNo = childSnapshot.val().mobileNo;
+
+                    var data = document.createElement("td");
+                    data.innerHTML = mobNo;
+                    row.appendChild(data);
+                    table.appendChild(row);
+                    document.body.appendChild(table);
+
+                    email = childSnapshot.val().email;
+
+                    var data = document.createElement("td");
+                    data.innerHTML = email;
+                    row.appendChild(data);
+                    table.appendChild(row);
+                    document.body.appendChild(table);
+
+                    address = childSnapshot.val().address;
+
+                    var data = document.createElement("td");
+                    data.innerHTML = name;
+                    row.appendChild(data);
+                    table.appendChild(row);
+                    document.body.appendChild(table);
+
+                    fromDate = childSnapshot.val().fromDate;
+
+                    var data = document.createElement("td");
+                    data.innerHTML = fromDate;
+                    row.appendChild(data);
+                    table.appendChild(row);
+                    document.body.appendChild(table);
+
+                    toDate = childSnapshot.val().toDate;
+
+                    var data = document.createElement("td");
+                    data.innerHTML = toDate;
+                    row.appendChild(data);
+                    table.appendChild(row);
+                    document.body.appendChild(table);
+
+                    orderId = childSnapshot.val().orderId;
+
+                    var data = document.createElement("td");
+                    data.innerHTML = orderId;
+                    row.appendChild(data);
+                    table.appendChild(row);
+                    document.body.appendChild(table);
+                })
+
+            }
+
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+    const saveChange = document.querySelector("button");
+    saveChange.onclick = function () {
+        // Update the database with the changes to the table
+        const table = document.getElementById("tbl");
+        const rows = table.querySelectorAll("tr");
+
+        rows.forEach((row) => {
+            const data = row.querySelectorAll("td");
+            const name = data[0].innerHTML;
+            const mobileNo = data[1].innerHTML;
+            const email = data[2].innerHTML;
+            const address = data[3].innerHTML;
+            const fromDate = data[4].innerHTML;
+            const toDate = data[5].innerHTML;
+            const orderId = data[6].innerHTML;
+
+            console.log(name);
+            console.log(email);
+            console.log(address);
+            console.log(mobileNo);
+            console.log(fromDate);
+            console.log(toDate);
+            console.log(orderId);
+        
+            // //`/mess/${mobileNo}`
+            
+            // const updates = {};
+            // updates[`/mess/${mobileNo}/`+ plan +'/Users/'+ mobNo+'/mobileNo'] = mobileNo;
+            // updates[`/mess/${mobileNo}/`+ plan +'/Users/'+ mobNo+'/email'] = email;
+            // updates[`/mess/${mobileNo}/`+ plan +'/Users/'+ mobNo+'/name'] = name;  //definitely will work
+            // updates[`/mess/${mobileNo}/`+ plan +'/Users/'+ mobNo+'/address'] = address;
+            // updates[`/mess/${mobileNo}/`+ plan +'/Users/'+ mobNo+'/fromDate'] = fromDate; //
+            // updates[`/mess/${mobileNo}/`+ plan +'/Users/'+ mobNo+'/toDate'] = toDate;
+            // updates[`/mess/${mobileNo}/`+ plan +'/Users/'+ mobNo+'/orderId'] = orderId;
+
+            // return update(ref(database), updates);
+        });
+    }
+</script>
+
+</html>
